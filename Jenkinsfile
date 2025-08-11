@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     stages {
         stage('Build') {
             agent{
@@ -34,7 +33,7 @@ pipeline {
                 '''
             }
         }
-        stage('Test') {
+        stage('E2E') {
             agent{
                 docker{
                     image 'mcr.microsoft.com/playwright:v1.54.0-noble'
@@ -50,7 +49,6 @@ pipeline {
             }
         }
 }
-    }
     post{
         always{
             junit 'test-results/junit.xml'
