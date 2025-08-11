@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        /*stage('Build') {
             agent{
                 docker{
                     image 'node:22-alpine'
@@ -18,37 +18,42 @@ pipeline {
                    ls -la
                 '''
             }
-        }
-         stage('Test') {
-            agent{
-                docker{
-                    image 'node:22-alpine'
-                    reuseNode true
+        }*/
+        stage('Test'){
+          parallel {
+                stage('Unit Test') {
+                    agent{
+                        docker{
+                            image 'node:22-alpine'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        sh '''
+                        test -f build/index.html && echo "✅ File exists" || (echo "❌ File not found" && exit 1)
+                        npm test
+                        '''
+                    }
                 }
-            }
-            steps {
-                sh '''
-                   test -f build/index.html && echo "✅ File exists" || (echo "❌ File not found" && exit 1)
-                   npm test
-                '''
-            }
-        }
-        stage('E2E') {
-            agent{
-                docker{
-                    image 'mcr.microsoft.com/playwright:v1.54.0-noble'
-                    reuseNode true
+                stage('E2E') {
+                    agent{
+                        docker{
+                            image 'mcr.microsoft.com/playwright:v1.54.0-noble'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        sh '''
+                        npm install serve
+                        node_modules/.bin/serve -s build &
+                        sleep 10
+                        npx playwright test --reporter=html
+                        '''
+                    }
                 }
-            }
-            steps {
-                sh '''
-                   npm install serve
-                   node_modules/.bin/serve -s build &
-                   sleep 10
-                   npx playwright test --reporter=html
-                '''
-            }
-        }
+                }
+                }
+         
 }
     post{
         always{
