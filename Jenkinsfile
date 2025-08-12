@@ -77,11 +77,14 @@ pipeline {
             }
             steps {
                 sh '''
-                    npm install netlify-cli
-                    node_modules/.bin/netlify --version
-                    echo "Site id:$NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --prod
+                     apk add --no-cache bash
+                     npm ci
+                     npm run build
+                     npm install netlify-cli
+                     node_modules/.bin/netlify --version
+                     echo "Site id:$NETLIFY_SITE_ID"
+                     node_modules/.bin/netlify status
+                     node_modules/.bin/netlify deploy --dir=build --prod --filter=@skip-build
                 '''
             }
         }
