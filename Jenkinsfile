@@ -62,11 +62,8 @@ pipeline {
                     }
                 }
                 }
-                }
-         
-}
-
-    stage('Deploy') {
+        }
+        stage('Deploy') {
             agent{
                 docker{
                     image 'node:22-alpine'
@@ -80,5 +77,9 @@ pipeline {
                 '''
             }
         }
+         
+}
+
+    
     
 }
