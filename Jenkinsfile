@@ -90,12 +90,18 @@ pipeline {
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --dir=build --no-build
-                    timeout(activity: true, time: 1) {
-                           input message: 'Proceed to prod deployment', ok: 'Looks good. Proceed the build'
-                    }
                 '''
             }
         }
+ 
+        stage('Approval'){
+            steps{
+                timeout(activity: true, time: 1) {
+                           input message: 'Proceed to prod deployment', ok: 'Looks good. Proceed the build'
+                    }
+            }
+        }
+
          stage('Deploy Prod') {
             agent {
                 docker {
