@@ -175,4 +175,20 @@ pipeline {
                     }
         }
     }
+     post {
+        always {
+            emailext(
+                to: 'ajaykumar012997@gmail.com',
+                subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                Hello Team,
+                
+                The build result is: ${currentBuild.currentResult}
+                Job: ${env.JOB_NAME}
+                Build Number: ${env.BUILD_NUMBER}
+                URL: ${env.BUILD_URL}
+                """
+            )
+        }
+    }
 }
