@@ -20,13 +20,13 @@ pipeline {
         //            '''
         //     }
         // }
-        stage('Docker') {
-           steps {
-              script {
-                 def img = docker.build("my-playwright")
-                }
-            }
-        }
+        // stage('Docker') {
+        //    steps {
+        //       script {
+        //          def img = docker.build("my-playwright")
+        //         }
+        //     }
+        // }
 
         stage('Build') {
             agent {
