@@ -21,8 +21,8 @@ pipeline {
             }
         }
         stage('Docker') {
-            steps {
-                sh 'docker build -t my-playwright .'
+            script {
+                 def img = docker.build("my-playwright")
             }
         }
 
