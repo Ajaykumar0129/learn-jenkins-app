@@ -8,18 +8,18 @@ pipeline {
     }
 
     stages {
-        // stage('AWS-CLI') {
-        //     agent {
-        //         docker {
-        //             image 'amazon/aws-cli'
-        //         }
-        //     }
-        //     steps {
-        //         sh '''
-        //              aws --version 
-        //            '''
-        //     }
-        // }
+        stage('AWS-CLI') {
+            agent {
+                docker {
+                    image 'amazon/aws-cli'
+                }
+            }
+            steps {
+                sh '''
+                     aws --version 
+                   '''
+            }
+        }
         // stage('Docker') {
         //    steps {
         //       script {
