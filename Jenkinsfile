@@ -43,7 +43,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'AWS', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
                         aws --version
-                        aws s3 sync build s3://$AWS_S3_BUCKET
+                    
                     '''
                 }
             }
@@ -72,28 +72,28 @@ pipeline {
                     }
                 }
 
-                stage('E2E') {
-                    agent {
-                        docker {
-                            image 'my-playwright'
-                            reuseNode true
-                        }
-                    }
+                // stage('E2E') {
+                //     agent {
+                //         docker {
+                //             image 'my-playwright'
+                //             reuseNode true
+                //         }
+                //     }
 
-                    steps {
-                        sh '''
-                            serve -s build &
-                            sleep 10
-                            npx playwright test  --reporter=html
-                        '''
-                    }
+                //     steps {
+                //         sh '''
+                //             serve -s build &
+                //             sleep 10
+                //             npx playwright test  --reporter=html
+                //         '''
+                //     }
 
-                    post {
-                        always {
-                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Local E2E', reportTitles: '', useWrapperFileDirectly: true])
-                        }
-                    }
-                }
+                //     post {
+                //         always {
+                //             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Local E2E', reportTitles: '', useWrapperFileDirectly: true])
+                //         }
+                //     }
+                // }
             }
         }
 
