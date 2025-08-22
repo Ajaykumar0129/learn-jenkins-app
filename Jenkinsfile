@@ -140,7 +140,7 @@ pipeline {
         stage('Deploy prod') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.54.0-noble'
+                    image 'my-playwright:latest'
                     reuseNode true
                 }
             }
