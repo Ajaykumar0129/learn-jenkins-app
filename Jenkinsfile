@@ -32,13 +32,13 @@ pipeline {
                 
             }
         }
-        // stage('Docker') {
-        //    steps {
-        //       script {
-        //          def img = docker.build("my-playwright")
-        //         }
-        //     }
-        // }
+        stage('Docker') {
+           steps {
+              script {
+                 def img = docker.build("my-playwright")
+                }
+            }
+        }
 
         stage('Build') {
             agent {
@@ -82,29 +82,29 @@ pipeline {
                     }
                 }
 
-                stage('E2E') {
-                    agent {
-                        docker {
-                            image 'mcr.microsoft.com/playwright:v1.54.0-noble'
-                            reuseNode true
-                        }
-                    }
+                // stage('E2E') {
+                //     agent {
+                //         docker {
+                //             image 'mcr.microsoft.com/playwright:v1.54.0-noble'
+                //             reuseNode true
+                //         }
+                //     }
 
-                    steps {
-                        sh '''
-                            npm install serve
-                            node_modules/.bin/serve -s build &
-                            sleep 10
-                            npx playwright test  --reporter=html
-                        '''
-                    }
+                //     steps {
+                //         sh '''
+                //             npm install serve
+                //             node_modules/.bin/serve -s build &
+                //             sleep 10
+                //             npx playwright test  --reporter=html
+                //         '''
+                //     }
 
-                    post {
-                        always {
-                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright local', reportTitles: '', useWrapperFileDirectly: true])
-                        }
-                    }
-                }
+                //     post {
+                //         always {
+                //             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright local', reportTitles: '', useWrapperFileDirectly: true])
+                //         }
+                //     }
+                // }
             }
         }
 
