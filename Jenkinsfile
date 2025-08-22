@@ -18,17 +18,26 @@ pipeline {
             }
             steps {
                 sh '''
-                    echo "🔧 Building Node.js app..."
+                    ls -la
+                    node --version
+                    npm --version
                     npm ci
                     npm run build
                     ls -la
-
-                    echo "🐳 Building Docker image..."
-                    docker build -t my-playwright:latest .
                 '''
             }
         }
 
+        stage('Build Docker Image') {
+                        agent any
+                        steps {
+                            script {
+                                sh '''
+                                    docker build -t my-playwright:latest .
+                                '''
+                            }
+                        }
+        }
 
         stage('AWS') {
             agent {
