@@ -28,6 +28,17 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+                        agent any
+                        steps {
+                            script {
+                                sh '''
+                                    docker build -t my-playwright:latest .
+                                '''
+                            }
+                        }
+        }
+
         stage('AWS') {
             agent {
                 docker {
@@ -111,6 +122,7 @@ pipeline {
 
             steps {
                 sh '''
+                    install -y jq
                     netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     netlify status
