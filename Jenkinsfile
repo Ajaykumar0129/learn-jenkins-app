@@ -83,28 +83,28 @@ pipeline {
                     }
                 }
 
-                // stage('E2E') {
-                //     agent {
-                //         docker {
-                //             image 'my-playwright'
-                //             reuseNode true
-                //         }
-                //     }
+                stage('E2E') {
+                    agent {
+                        docker {
+                            image 'my-playwright'
+                            reuseNode true
+                        }
+                    }
 
-                //     steps {
-                //         sh '''
-                //             serve -s build &
-                //             sleep 10
-                //             npx playwright test  --reporter=html
-                //         '''
-                //     }
+                    steps {
+                        sh '''
+                            serve -s build &
+                            sleep 10
+                            npx playwright test  --reporter=html
+                        '''
+                    }
 
-                //     post {
-                //         always {
-                //             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Local E2E', reportTitles: '', useWrapperFileDirectly: true])
-                //         }
-                //     }
-                // }
+                    post {
+                        always {
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Local E2E', reportTitles: '', useWrapperFileDirectly: true])
+                        }
+                    }
+                }
             }
         }
 
@@ -156,7 +156,7 @@ pipeline {
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     netlify deploy --dir=build --prod
-                    
+                    npx playwright test  --reporter=html
                 '''
             }
 
